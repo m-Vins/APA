@@ -11,7 +11,7 @@ typedef struct {
 
 int disp(int pos, t_val *val, tipo *sol, int n);
 int disp_wrapper(t_val *val);
-int valida(tipo *arr, int arr_count);
+//int valida(tipo *arr, int arr_count);
 void stampa(tipo *arr, int arr_count);
 
 
@@ -104,7 +104,8 @@ int disp(int pos, t_val *val, tipo *sol, int n){
     }
     return 0;
 }
-
+//cotrolla che tra l'ultima pietra e la prima
+//le regole vengano rispettate
 int valida(tipo *arr, int arr_count){
 
     if(arr[arr_count-1]==r||arr[arr_count-1]==s){
