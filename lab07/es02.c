@@ -24,9 +24,9 @@ int getVal(wrapper_t *valori, pietre_t *arr, int arr_count);
 
 
 int main() {
-    wrapper_t *pietre;
+    wrapper_t *pietre=NULL;
     int i,n=0,l_sol,maxRip,nr,j;
-    pietre_t *sol;
+    pietre_t *BestSol=NULL;
     FILE *fp;
 
 #if DBG
@@ -37,11 +37,11 @@ int main() {
     for(i=0;i<err;i++)
         n+=pietre[i].n;
 
-    sol=malloc(n* sizeof(pietre_t));
-    l_sol=disp_wrapper(pietre,maxRip,sol,n);
+    BestSol=malloc(n * sizeof(pietre_t));
+    l_sol=disp_wrapper(pietre, maxRip, BestSol, n);
     printf("la sequenza della collana è :\n");
-    stampa(sol,l_sol);
-    printf("\ndi lunghezza %d e valore %d",l_sol,getVal(pietre,sol,l_sol));
+    stampa(BestSol, l_sol);
+    printf("\ndi lunghezza %d e valore %d",l_sol,getVal(pietre, BestSol, l_sol));
 #endif
 
     fp=fopen(FileName,"r");
@@ -64,16 +64,18 @@ int main() {
         for(j=0;j<err;j++)
             n+=pietre[i].n;
 
-        sol=malloc(n* sizeof(pietre_t));
-        l_sol=disp_wrapper(pietre,maxRip,sol,n);
+        BestSol=malloc(n * sizeof(pietre_t));
+        l_sol=disp_wrapper(pietre, maxRip, BestSol, n);
         printf("la sequenza della collana è :\n");
-        stampa(sol,l_sol);
-        printf("di lunghezza %d e valore %d\n",l_sol,getVal(pietre,sol,l_sol));
+        stampa(BestSol, l_sol);
+        printf("di lunghezza %d e valore %d\n",l_sol,getVal(pietre, BestSol, l_sol));
         for(j=0;j<50;j++) printf("_");
         printf("\n");
     }
     fclose(fp);
-
+    free(BestSol);
+    free(pietre);
+    
 
     return 0;
 }
