@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define FIleName "test.txt"
+
 
 typedef enum {z,r,t,s,err}pietre_t;
 
