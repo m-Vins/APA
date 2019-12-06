@@ -16,8 +16,8 @@ typedef struct {
 }itemSol_t;
 
 int getVal(item_t *val, pietre_t *arr, int arr_count);
-void newSol(itemSol_t *BestSol, pietre_t *sol,int n);
-void dispR(int pos, item_t *val,pietre_t *sol, int n, int maxRip, int contRip,itemSol_t *BestSol,int*trovato);
+void newSol(itemSol_t *BestSol, pietre_t *sol,int n,int val);
+void dispR(int pos, item_t *val,pietre_t *sol, int n, int maxRip, int contRip,itemSol_t *BestSol,int *trovato);
 void disp(item_t *val,int n,int maxRip,itemSol_t *BestSol);
 int valida(pietre_t *sol, int n);
 void stampa(pietre_t *arr, int arr_count);
@@ -30,12 +30,11 @@ int main() {
 
     tot=0;
     for(i=0;i<err;i++){
-        pietre[i].p=i;
+        pietre[i].p=i;//inizialzzo le pietre
         printf("inserire numero pietre [%s]: ",nomi[i]);
         scanf("%d",&pietre[i].n);
-        printf("\n di valore: ");
+        printf("di valore: ");
         scanf("%d",&pietre[i].val);
-        printf("\n");
         tot+=pietre[i].n;
     }
     printf("inserire maxRip: ");
@@ -46,7 +45,7 @@ int main() {
 
     disp(pietre,tot,maxRip,BestSol);
 
-    printf("la soluzione ha valore: %d \nnumero pietre: %d \n",BestSol->val,BestSol->n);
+    printf("\nla soluzione ha valore: %d \nnumero pietre: %d \n",BestSol->val,BestSol->n);
     stampa(BestSol->pietre,BestSol->n);
 
     free(BestSol->pietre);
@@ -58,20 +57,22 @@ int main() {
 void disp(item_t *val,int n,int maxRip,itemSol_t *BestSol){
     int i, trovato=0;
     pietre_t *sol=malloc(n*sizeof(pietre_t));
+
+    BestSol->val=BestSol->n=0;
+
     for(i=n;i>0&&!trovato;i--){
         dispR(0,val,sol,i,maxRip,0,BestSol,&trovato);
     }
     free(sol);
 }
-void dispR(int pos, item_t *val,pietre_t *sol, int n, int maxRip, int contRip,itemSol_t *BestSol,int*trovato){
+void dispR(int pos, item_t *val,pietre_t *sol, int n, int maxRip, int contRip,itemSol_t *BestSol,int *trovato){
     int i;
 
     if(pos>=n){
         if(getVal(val,sol,n)>BestSol->val&&valida(sol,n)){
-            newSol(BestSol,sol,n);
-            BestSol->val=getVal(val,sol,n);
+            newSol(BestSol,sol,n,getVal(val,sol,n));
             *trovato=1;
-        }
+    }
         return;
     }
 
@@ -127,7 +128,7 @@ void dispR(int pos, item_t *val,pietre_t *sol, int n, int maxRip, int contRip,it
                 }
                 break;
             case s:
-                if(val[s].n>0){
+                if(val[s].n>0&&contRip<maxRip){
                     val[s].n--;
                     sol[pos]=val[s].p;
                     dispR(pos+1,val,sol,n,maxRip,contRip+1,BestSol,trovato);
@@ -151,7 +152,7 @@ int getVal(item_t *val, pietre_t *arr, int arr_count){
     int sum=0;
     for(i=0;i<arr_count;i++){
         for(j=0;j<err;j++){
-            if(arr[i]==j){
+            if(arr[i]==val[j].p){
                 sum+=val[j].val;
             }
         }
@@ -159,9 +160,10 @@ int getVal(item_t *val, pietre_t *arr, int arr_count){
     return sum;
 }
 
-void newSol(itemSol_t *BestSol, pietre_t *sol,int n){
+void newSol(itemSol_t *BestSol, pietre_t *sol,int n,int val){
     int i;
     BestSol->n=n;
+    BestSol->val=val;
     for(i=0;i<n;i++){
         BestSol->pietre[i]=sol[i];
     }
@@ -172,9 +174,9 @@ int valida(pietre_t *sol, int n){
     for(i=0;i<n;i++){
         switch(sol[i]){
             case z: nz++;
-            break;
+                break;
             case s: ns++;
-            break;
+                break;
         }
     }
     return nz<=ns;
