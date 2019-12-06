@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define FileName "test.txt"
+#define DBG 0
 
 
 typedef enum {z,r,t,s,err}pietre_t;
@@ -26,11 +28,17 @@ int main() {
     itemSol_t *BestSol;
     char nomi[4][9]={"zaffiro","rubino","topazio","smeraldo"};
     item_t *pietre=malloc(err* sizeof(item_t));
-    int tot,i,maxRip;
+    int tot,i,maxRip,n_test,j;
+    FILE *f;
 
+    //inizializzo le pietre
+    for(i=0;i<err;i++) pietre[i].p=i;
+
+    BestSol=malloc(sizeof(itemSol_t));
+
+#if DBG
     tot=0;
     for(i=0;i<err;i++){
-        pietre[i].p=i;//inizialzzo le pietre
         printf("inserire numero pietre [%s]: ",nomi[i]);
         scanf("%d",&pietre[i].n);
         printf("di valore: ");
@@ -40,7 +48,7 @@ int main() {
     printf("inserire maxRip: ");
     scanf("%d",&maxRip);
 
-    BestSol=malloc(sizeof(itemSol_t));
+
     BestSol->pietre=malloc(tot* sizeof(pietre_t));
 
     disp(pietre,tot,maxRip,BestSol);
@@ -49,7 +57,39 @@ int main() {
     stampa(BestSol->pietre,BestSol->n);
 
     free(BestSol->pietre);
+
+#endif
+
+    f=fopen(FileName,"r");
+    if(f==NULL){
+        printf("ERRORE FILE");
+        return -1;
+    }
+    fscanf(f,"%d\n",&n_test);
+    for(i=0;i<n_test;i++){
+        printf("TEST %d\n",i);
+        fscanf(f,"%d%d%d%d%d%d%d%d%d\n",&pietre[0].n,&pietre[1].n,&pietre[2].n,&pietre[3].n,
+               &pietre[0].val,&pietre[1].val,&pietre[2].val,&pietre[3].val,&maxRip);
+
+        for(tot=0,j=0;j<err;j++) tot+=pietre[j].n;//totale pietre
+        printf("totale pietre: %d",tot);
+
+        BestSol->pietre=malloc(tot* sizeof(pietre_t));
+
+        disp(pietre,tot,maxRip,BestSol);
+
+        //output risultato
+        printf("\nla soluzione ha valore: %d \nnumero pietre: %d \n",BestSol->val,BestSol->n);
+        stampa(BestSol->pietre,BestSol->n);
+        for(j=0;j<50;j++) printf("_");
+        printf("\n");
+
+        free(BestSol->pietre);
+    }
+
+
     free(BestSol);
+
 
     return 0;
 }
@@ -72,7 +112,7 @@ void dispR(int pos, item_t *val,pietre_t *sol, int n, int maxRip, int contRip,it
         if(getVal(val,sol,n)>BestSol->val&&valida(sol,n)){
             newSol(BestSol,sol,n,getVal(val,sol,n));
             *trovato=1;
-    }
+        }
         return;
     }
 
@@ -114,7 +154,7 @@ void dispR(int pos, item_t *val,pietre_t *sol, int n, int maxRip, int contRip,it
                 }
                 break;
             case t:
-                if(val[z].n>0&&contRip<maxRip){
+                if(val[z].n>0){
                     val[z].n--;
                     sol[pos]=val[z].p;
                     dispR(pos+1,val,sol,n,maxRip,1,BestSol,trovato);
