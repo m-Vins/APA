@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #define MAX 50+1
 
 typedef struct {
@@ -35,7 +36,7 @@ typedef struct {
     tabEquip_t *equip;
     stat_t stat;
 }pg_t;
- 
+
 
 typedef struct node *link,nodoPg_t;
 
@@ -49,6 +50,9 @@ typedef struct {
     link tailPg;
     int nPg;
 }tabPg_t;
+
+typedef enum {c_add,c_remove}c_equip;
+
 
 
 int main() {
@@ -127,11 +131,59 @@ void loadPg(tabPg_t *tabPg, FILE *fp){
         fscanf(fp,"%s%s%s%d%d%d%d%d%d",tmp.codice,tmp.nome,tmp.classe,
                 &tmp.stat.hp,&tmp.stat.mp,&tmp.stat.atk,&tmp.stat.def,&tmp.stat.mag,
                 &tmp.stat.spr);
-        tmp.equip=NULL;
+        tmp.equip=malloc(sizeof(tabEquip_t));
+        tmp.equip->inUso=0;
+        tmp.equip->vettEq=malloc(8*sizeof(inv_t));
         tabPg->headPg=newNode(tmp,tabPg->headPg);
     }
     for(x=tabPg->headPg;x->next!=NULL;x=x->next);
     tabPg->tailPg=x;
 }
 
-void deletePg
+link searchPg(link head,char *key){
+    link x;
+
+    for(x=head;x->next!=NULL;x=x->next){
+        //controllare se inizia in modo corretto
+        if(strcmp(x->pg.codice,key)==0)
+            return x;
+    }
+    return NULL;
+}
+
+link deletePg(link head, char *key){
+    link x,p;
+    if(head==NULL) return NULL;
+    for(x=head,p=NULL;x->next!=NULL;p=x,x=x->next){
+        if(strcmp(x->pg.codice,key)==0){
+            if(x==head)
+                head=x->next;
+            else
+                p->next=x->next;
+            free(x);
+            break;
+        }
+    }
+    return head;
+}
+
+void editEquipPg(link head,char *key,tabInv_t *tabInv){
+    int i,cmd;
+    pg_t pg=searchPg(head,key)->pg;
+
+
+    printf("sono in uso su questo pg %d oggetti:\n",pg.equip->inUso);
+    for(i=0;i<pg.equip->inUso;i++)
+        printf("nome: %s, tipo: %s\n",pg.equip->vettEq[i]->nome,pg.equip->vettEq[i]->tipo);
+    printf("inserire comando: (0):aggiungi oggetto-(1)rimuovi oggetto\n");
+    scanf("&d",&cmd);
+    
+    switch((c_equip)cmd){
+        case c_add:
+            
+            break;
+        case c_remove:
+            break;
+        default: printf("\nERRORE COMANDO EQUIPAGGIAMENTO\n");
+    }
+}
