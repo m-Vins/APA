@@ -35,6 +35,7 @@ typedef struct {
     tabEquip_t *equip;
     stat_t stat;
 }pg_t;
+ 
 
 typedef struct node *link,nodoPg_t;
 
