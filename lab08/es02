@@ -23,6 +23,7 @@ int disp(tess_t **Scacchiera,tess_t *tessere, int nr, int nc, int nt);
 int getVal(tess_t **S,int nr, int nc);
 void newSol(tess_t **new,tess_t **tmp,int nr,int nc);
 void displaySol(tess_t **S,int nr,int nc);
+void free2d(tess_t **x,int nr);
 
 
 int main() {
@@ -41,6 +42,9 @@ int main() {
     val=disp(Scacchiera,tessere,nr,nc,nt);
     displaySol(Scacchiera,nr,nc);
     printf("di valore : %d",val);
+
+    free(tessere);
+    free2d(Scacchiera,nr);
     return 0;
 }
 
@@ -92,7 +96,9 @@ int disp(tess_t **Scacchiera,tess_t *tessere, int nr, int nc, int nt){
     int BestVal=0;
     tess_t **BScacchiera=AllocaScacchiera(nr,nc);
     dispR(0,Scacchiera,tessere,nr,nc,nt,&BestVal,BScacchiera);
+    //memorizzo in Scacchiera la soluzione
     newSol(Scacchiera,BScacchiera,nr,nc);
+    free2d(BScacchiera,nr);
     return BestVal;
 }
 
@@ -110,13 +116,8 @@ void dispR(int pos, tess_t **Sc, tess_t *tess, int nr, int nc, int nt, int *Best
     }
 
     //aritmetica degli indici della Scacchiera
-    for(i=0;i<pos;i++){
-        y++;
-        if(y==nc){
-            x++;
-            y=0;
-        }
-    }
+    x=pos/nr;
+    y=pos%nc;
 
     if(Sc[x][y].mark==1){
         dispR(pos+1,Sc,tess,nr,nc,nt,BestVal,BSol);
@@ -182,12 +183,19 @@ void newSol(tess_t **new,tess_t **tmp,int nr,int nc){
 
 void displaySol(tess_t **S,int nr,int nc){
     int i,j;
-    printf("la soluzione migliore é:\n");
+    printf("la soluzione migliore é:\n[v=colore verticale,o=colore orizzontale,i=indice tessera]\n");
     printf("\n");
     for(i=0;i<nr;i++){
         for(j=0;j<nc;j++){
-            printf("|v:%c,o:%c",S[i][j].v.col,S[i][j].o.col);
+            printf("|v:%c,o:%c,i:%d",S[i][j].v.col,S[i][j].o.col,S[i][j].index);
         }
-        printf("|\n");
+        printf("|\n\n");
     }
+}
+
+void free2d(tess_t **x,int nr){
+    int i;
+    for(i=0;i<nr;i++)
+        free(x[i]);
+    free(x);
 }
