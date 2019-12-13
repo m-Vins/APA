@@ -89,10 +89,9 @@ void loadPg(struct tabPg_t *tabPg, FILE *fp){
 }
 
 link searchPg(struct tabPg_t *tabPg,char *key){
-    link x,p;
+    link x;
 
-    for(x=tabPg->headPg;x!=NULL;p=x,x=x->next){
-
+    for(x=tabPg->headPg;x!=NULL;x=x->next){
         if(strcmp(x->pg.codice,key)==0)
             return x;
     }
@@ -211,33 +210,18 @@ void displayStat(struct tabPg_t *tabPg,char *key){
 }
 
 
-void displayPg(struct tabPg_t *tabPg, char *key){
-    int i;
-    pg_t pg=searchPg(tabPg,key)->pg;
-
-    printf("codice: %s\nnome: %s\nclasse: %s\n",pg.codice,pg.nome,pg.classe);
-    if(pg.equip->inUso==0){
-        printf("il PG non ha ancora nessun equipaggiamento.\n");
-    }else{
-        printf("sono in uso su questo pg %d oggetti:\n", pg.equip->inUso);
-        for (i = 0; i < pg.equip->inUso; i++)
-            displayObj(pg.equip->vettEq[i]);
-    }
-    displayStat(tabPg,key);
-}
-
-void displayPgbyVal(pg_t pg){
+void displayPg(link node){
     int i;
 
-    printf("codice: %s\nnome: %s\nclasse: %s\n",pg.codice,pg.nome,pg.classe);
-    if(pg.equip->inUso==0){
+    printf("codice: %s\nnome: %s\nclasse: %s\n",node->pg.codice,node->pg.nome,node->pg.classe);
+    if(node->pg.equip->inUso==0){
         printf("il PG non ha ancora nessun equipaggiamento.\n");
     }else{
-        printf("sono in uso su questo pg %d oggetti:\n", pg.equip->inUso);
-        for (i = 0; i < pg.equip->inUso; i++)
-            displayObj(pg.equip->vettEq[i]);
+        printf("sono in uso su questo pg %d oggetti:\n", node->pg.equip->inUso);
+        for (i = 0; i < node->pg.equip->inUso; i++)
+            displayObj(node->pg.equip->vettEq[i]);
     }
-    displayStat_int(pg);
+    displayStat_int(node->pg);
 }
 
 void freePG(pg_t *pg){
@@ -262,6 +246,10 @@ void freeTabList(struct tabPg_t *tabPg){
 
 void displayList(struct tabPg_t *tabPg){
     link x;
-    for(x=tabPg->headPg;x!=NULL;x=x->next)
-        displayPgbyVal(x->pg);
+    for(x=tabPg->headPg;x!=NULL;x=x->next) {
+        displayPg(x);
+        printf("\n\n");
+        for (int i = 0; i < 50; i++) printf("_");
+    }
+
 }
