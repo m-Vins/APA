@@ -19,7 +19,7 @@ LINK searchPg(TABPG tabPg,char *key);
 void deletePg(TABPG tabPg, char *key);
 void editEquipPg(TABPG tabPg,char *key,TABINV tabInv);
 void displayStat(TABPG tabPg,char *key);
-void displayPg(TABPG tabPg, char *key);
+void displayPg(LINK node);
 void freeTabList(TABPG tabPg);
 void displayList(TABPG tabPg);
 
