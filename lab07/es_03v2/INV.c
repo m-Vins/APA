@@ -44,3 +44,23 @@ void addObj_wrapper(tabInv_t *tabInv,FILE *fp){
     }
 
 }
+
+struct inv_t *searchObj(tabInv_t *tabinv, char *key){
+    int i;
+
+    for(i=0;i<tabinv->nInv;i++){
+        if(strcmp(tabinv->vettInv[i].nome,key)==0){
+            return &(tabinv->vettInv[i]);
+        }
+    }
+    return NULL;
+}
+
+void displayObj(tabInv_t *tabInv, char *key){
+    struct inv_t *obj=searchObj(tabInv,key);
+
+    printf("nome: %s\ntipo: %s\n",obj->nome,obj->tipo);
+    printf("hp: %d\nmp: %d\natk: %d\ndef: %d\nmag: %d \nspr: %d\n",obj->stat.hp,
+           obj->stat.mp,obj->stat.atk,obj->stat.def,obj->stat.mag,obj->stat.spr);
+    printf("\n");
+}
