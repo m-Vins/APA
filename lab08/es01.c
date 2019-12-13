@@ -18,10 +18,11 @@ void attSel(int N,att *v);
 void bubblesort(att *array, int arr_count);
 
 int main() {
-    att attivity[6];
+    att *attivity;
     int N,i;
     printf("inserire numero intervalli: ");
     scanf("%d",&N);
+    attivity=malloc(N* sizeof(att));
     for(i=0;i<N;i++){
         printf("\n[%d]inserire Ti e Tf: ",i);
         scanf("%d%d",&attivity[i].i,&attivity[i].f);
