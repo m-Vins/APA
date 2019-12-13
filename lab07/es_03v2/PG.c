@@ -168,3 +168,19 @@ void displayStat(tabPg_t *tabPg,char *key){
     if(tmp<1) tmp=1;
     printf("hp: %d\n",tmp);
 }
+
+
+void displayPg(tabPg_t *tabPg, char *key){
+    int i;
+    pg_t pg=searchPg(tabPg->headPg,key)->pg;
+
+    printf("codice: %s\nnome: %s\nclasse: %s\n",pg.codice,pg.nome,pg.classe);
+    if(pg.equip->inUso==0){
+        printf("il PG non ha ancora nessun equipaggiamento.\n");
+    }else{
+        printf("sono in uso su questo pg %d oggetti:\n", pg.equip->inUso);
+        for (i = 0; i < pg.equip->inUso; i++)
+            printf("[%d] nome: %s, tipo: %s\n",i+1, pg.equip->vettEq[i]->nome, pg.equip->vettEq[i]->tipo);
+    }
+    displayStat(tabPg,key);
+}
