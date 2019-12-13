@@ -61,7 +61,7 @@ int main() {
             case c_searchPg:
                 printf("inserire codice personaggio: ");
                 scanf("%s",key);
-                displayPg(tabPg,key);
+                displayPg(searchPg(tabPg,key));
                 break;
             case c_exit:
                 esci=1;
