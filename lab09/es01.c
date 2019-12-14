@@ -50,7 +50,7 @@ void DP(att *time, int N){
     }
     printf("the Best Solution is:\n");
     DisplaySol(time,P,last);
-    printf("per una somma di durate pari a %d.",BestR);
+    printf("and the total time is: %d.",BestR);
 }
 
 
