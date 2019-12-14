@@ -69,6 +69,8 @@ int main() {
     printf("\n");
 
 DP(attivity,N);
+    
+    free(attivity);
 
 
     return 0;
