@@ -69,6 +69,7 @@ link searchPg(link head,char *key);
 link deletePg(link head, char *key);
 void editEquipPg(link head,char *key,tabInv_t *tabInv);
 void displayStat(tabPg_t *tabPg,char *key);
+void freeTabList(tabPg_t *tabPg);
 
 c_com leggicomando();
 
@@ -79,7 +80,7 @@ int main() {
     tabInv_t *tabInv=NULL;
     FILE *fp;
 
-while(!esci){
+    while(!esci){
         switch (leggicomando()){
             case c_loadListPg:
                 tabPg=creaListaPg();
@@ -119,6 +120,10 @@ while(!esci){
                 break;
         }
     }
+
+
+    freeTabInv(tabInv);
+    freeTabList(tabPg);
     return 0;
 }
 
@@ -171,6 +176,24 @@ tabPg_t *creaListaPg(void){
     return tabPg;
 }
 
+void freePG(pg_t *pg){
+    free(pg->equip->vettEq);
+    free(pg->equip);
+}
+
+void freeListR(link head){
+    if(head==NULL) return;
+
+    freeListR(head->next);
+    freePG(&head->pg);
+    free(head);
+}
+
+void freeTabList(tabPg_t *tabPg){
+    freeListR(tabPg->headPg);
+    free(tabPg);
+}
+
 link newNode(pg_t pg,link next){
     nodoPg_t *x=malloc(sizeof(nodoPg_t));
     if(x==NULL)
@@ -202,14 +225,14 @@ void loadPg(tabPg_t *tabPg, FILE *fp){
             tabPg->headPg = newNode(tmp, tabPg->headPg);
         }
     }
-    for(x=tabPg->headPg;x!=NULL;x=x->next);
+    for(x=tabPg->headPg;x->next!=NULL;x=x->next);
     tabPg->tailPg=x;
 }
 
 link searchPg(link head,char *key){
-    link x,p;
+    link x;
 
-    for(x=head;x!=NULL;p=x,x=x->next){
+    for(x=head;x!=NULL;x=x->next){
 
         if(strcmp(x->pg.codice,key)==0)
             return x;
@@ -226,6 +249,7 @@ link deletePg(link head, char *key){
                 head=x->next;
             else
                 p->next=x->next;
+            freePG(&x->pg);
             free(x);
             break;
         }
