@@ -23,12 +23,13 @@ int main() {
     printf("inserire numero intervalli: ");
     scanf("%d",&N);
     attivity=malloc(N* sizeof(att));
-    for(i=0;i<N;i++){
-        printf("\n[%d]inserire Ti e Tf: ",i);
-        scanf("%d%d",&attivity[i].i,&attivity[i].f);
+    for(i=0;i<N;i++) {
+        printf("\n[%d]inserire Ti e Tf: ", i);
+        scanf("%d%d", &attivity[i].i, &attivity[i].f);
     }
     printf("\n");
     attSel(N,attivity);
+    free(attivity);
     return 0;
 }
 
@@ -44,6 +45,10 @@ void attSel(int N,att *v){
     for(int i=0;i<BestSol->arr_count;i++){
         printf("(%d,%d)\n",BestSol->array[i].i,BestSol->array[i].f);
     }
+
+    free(BestSol->array);
+    free(BestSol);
+    free(sol);
 }
 
 void powerSet(int pos, att *val, att *sol, int k, int start,BSol_t *BestSol){
