@@ -1,9 +1,16 @@
 /*applicabilità della programmazione dinamica:
- * la sottosoluzione c[X] del problema è data da due possibili casi:
  *
- * c[X(N-1)]:=   -max(val[X(N-1)]+val[X(i)])     dove 0<=i<N-1 e sia verificata la compatibiltà tra X(N-1) e X(i)
- *               -val[X(N)]                      se N=1
- *               
+ * ipotesi:  sol[k] massimo, P vettore con gli indici degli elementi precedenti nella soluzione.
+ *
+ * la sottosoluzione sol[P[k-1]] deve essere la massima possibile, altrimenti se così non fosse
+ * avremmo sol'[k]=sol'[P[k-1]]+val[k]>sol[k] e contraddice l'ipotesi sol[k]= massima soluzione.
+ *
+ *
+ * la sottosoluzione sol[X] del problema è data da due possibili casi:
+ *
+ * sol[X(N-1)]:=   -max(val[X(N-1)]+val[X(i)])     dove 0 <= i < N-1 e sia verificata la compatibiltà tra X(N-1) e X(i)
+ *                 -val[X(N)]                      se N=1
+ *
  *
 */
 #include <stdio.h>
@@ -14,8 +21,6 @@ typedef struct {
     int i,f;
     int val;
 }att;
-
-
 
 int compatibilty(att x1,att x2){
     return (x1.f<=x2.i);
@@ -29,7 +34,6 @@ void DisplaySol(att *time, int *P,int i){
     DisplaySol(time,P,P[i]);
     printf("%d-%d\n",time[i].i,time[i].f);
 }
-
 
 void DP(att *time, int N){
     int i,j,max,BestR=0;
