@@ -35,6 +35,21 @@ void DisplaySol(att *time, int *P,int i){
     printf("%d-%d\n",time[i].i,time[i].f);
 }
 
+void bubblesort(att *array, int arr_count){
+    int i,j,l=0,r=arr_count-1;
+    att tmp;
+
+    for(i=l;i<r;i++){
+        for(j=l;j<l-i+r;j++){
+            if(array[j].i>array[j+1].i){
+                tmp=array[j];
+                array[j]=array[j+1];
+                array[j+1]=tmp;
+            }
+        }
+    }
+}
+
 void DP(att *time, int N){
     int i,j,max,BestR=0;
     int Value[N],P[N],last=1;
@@ -78,7 +93,7 @@ int main() {
         attivity[i].val=attivity[i].f-attivity[i].i;
     }
     printf("\n");
-
+bubblesort(attivity,N);
 DP(attivity,N);
 
 
