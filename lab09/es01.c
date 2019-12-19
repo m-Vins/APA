@@ -1,4 +1,11 @@
-
+/*applicabilità della programmazione dinamica:
+ * la sottosoluzione c[X] del problema è data da due possibili casi:
+ *
+ * c[X(N-1)]:=   -max(val[X(N-1)]+val[X(i)])     dove 0<=i<N-1 e sia verificata la compatibiltà tra X(N-1) e X(i)
+ *               -val[X(N)]                      se N=1
+ *               
+ *
+*/
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -28,12 +35,12 @@ void DP(att *time, int N){
     int i,j,max,BestR=0;
     int Value[N],P[N],last=1;
 
-    Value[0]=1;
+    Value[0]=time[0].val;
     P[0]=-1;
 
 
     for(i=1;i<N;i++){
-        Value[i]=1;
+        Value[i]=time[i].val;
         P[i]=-1;
         for(j=0,max=0;j<i;j++){
             if(compatibilty(time[j], time[i]) && Value[j] > max){
@@ -69,8 +76,6 @@ int main() {
     printf("\n");
 
 DP(attivity,N);
-    
-    free(attivity);
 
 
     return 0;
