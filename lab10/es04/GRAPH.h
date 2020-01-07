@@ -15,7 +15,6 @@ typedef struct graph_s *Graph;
 
 Graph GRAPHinit(int V);
 Graph GRAPHfree(Graph G);
-//int GraphGetIndex(Graph G, char *name);
 Graph GRAPHload(FILE *fp);
 void GRAPHstore(Graph G,FILE *fp);
 void GRAPHloadLadj(Graph G);
