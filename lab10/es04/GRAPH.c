@@ -89,29 +89,7 @@ static void insertEdge(Graph G, Edge E){
     G->madj[E.v][E.w]=E.wt;
     G->madj[E.w][E.v]=E.wt;
 }
-/*
-int GraphGetIndex(Graph G, char *name){
-    return STsearchByName(name,G->st);
-}
 
-static void removEdge(Graph G, Edge E){
-    if(G->madj[E.v][E.w]!=0) G->E--;
-    G->madj[E.v][E.w]=0;
-    G->madj[E.w][E.v]=0;
-}
-
-int GRAPHedges(Graph G, Edge *Edge){
-    int nE=0;
-    for(int i=0;i<G->V;i++){
-        for(int j=0;j<i;j++){
-            if(G->madj[i][j]!=0)
-                Edge[nE++]=edgeCreate(i,j,G->madj[i][j]);
-        }
-    }
-    return nE;
-}
-
-*/
 Graph GRAPHload(FILE *fp){
     int count=0,val,id1,id2;
     Graph G;
